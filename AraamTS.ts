@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";
 import { Request, Response } from "express";
 import { IAppConfig } from "./Interfaces/IAppConfig";
 import { IRouterConfig } from "./Interfaces/IRouterConfig";
@@ -8,7 +8,7 @@ const path = require("path");
 @Logger.log
 export class AraamTS {
     // Main express App
-    public app;
+    public app: express.Application;
 
     // HTTP Verb Type - Creator Map
     private httpVerbTypeMap: Map<string, (router: any, url: string, method: (request: Request, response: Response) => void) => void>;
@@ -20,6 +20,8 @@ export class AraamTS {
         this.httpVerbTypeMap = new Map<string, (router: any, url: string, method: (request: Request, response: Response) => void) => void>();
         this.httpVerbTypeMap.set("GET", this.GETVerbAdder.bind(this));
         this.httpVerbTypeMap.set("POST", this.POSTVerbAdder.bind(this));
+        this.httpVerbTypeMap.set("PUT", this.PUTVerbAdder.bind(this));
+        this.httpVerbTypeMap.set("DELETE", this.DELETEVerbAdder.bind(this));
 
         // Populate the errorMap
         this.populateErrorAndWarningMap();
@@ -92,7 +94,7 @@ export class AraamTS {
 
     // Adds routes to the router
     @Logger.call()
-    private addRoutes(expressRouter: any, routerConfig: IRouterConfig) {
+    private addRoutes(expressRouter: express.Router, routerConfig: IRouterConfig) {
         // Add routes to the newRouter
         routerConfig.routes.forEach(route => {
 
@@ -116,7 +118,7 @@ export class AraamTS {
 
     // Adds a GET Route
     @Logger.call()
-    private GETVerbAdder(expressRouter: any, url: string, method: (request: Request, response: Response) => void) {
+    private GETVerbAdder(expressRouter: express.Router, url: string, method: (request: Request, response: Response) => void) {
         if (url.length) {
             // Add the method as a route to the router
             expressRouter.get(url, method);
@@ -127,9 +129,35 @@ export class AraamTS {
             Logger.warn(this.errorMap.get("url"));
     }
 
+    // Adds a PUT Route
+    @Logger.call()
+    private PUTVerbAdder(expressRouter: express.Router, url: string, method: (request: Request, response: Response) => void) {
+        if (url.length) {
+            // Add the method as a route to the router
+            expressRouter.put(url, method);
+            return;
+        }
+
+        else
+            Logger.warn(this.errorMap.get("url"));
+    }
+
+    // Adds a DELETE Route
+    @Logger.call()
+    private DELETEVerbAdder(expressRouter: express.Router, url: string, method: (request: Request, response: Response) => void) {
+        if (url.length) {
+            // Add the method as a route to the router
+            expressRouter.delete(url, method);
+            return;
+        }
+
+        else
+            Logger.warn(this.errorMap.get("url"));
+    }
+
     // Adds a POST Route
     @Logger.call()
-    private POSTVerbAdder(expressRouter: any, url: string, method: (request: Request, response: Response) => void) {
+    private POSTVerbAdder(expressRouter: express.Router, url: string, method: (request: Request, response: Response) => void) {
         if (url.length) {
             expressRouter.post(url, method);
             return
