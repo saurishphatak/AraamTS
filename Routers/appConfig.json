@@ -1,0 +1,27 @@
+{
+    "appName": "TestApp",
+    "port": 3000,
+    "routers": [
+        {
+            "routerName": "Actor",
+            "mountPoint": "/actor",
+            "routes": [
+                {
+                    "type": "GET",
+                    "url": "/getAll",
+                    "methodModule": "./Routers/Actor/getAll.ts"
+                },
+                {
+                    "type": "GET",
+                    "url": "/get",
+                    "methodModule": "./Routers/Actor/get.ts"
+                },
+                {
+                    "type": "POST",
+                    "url": "/addActor",
+                    "methodModule": "./Routers/Actor/post.ts"
+                }
+            ]
+        }
+    ]
+}
