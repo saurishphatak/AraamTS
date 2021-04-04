@@ -20,6 +20,16 @@
                     "type": "POST",
                     "url": "/addActor",
                     "methodModule": "./Routers/Actor/post.ts"
+                },
+                {
+                    "type": "PUT",
+                    "url": "/put",
+                    "methodModule": "./Routers/Actor/put.ts"
+                },
+                {
+                    "type": "DELETE",
+                    "url": "/delete",
+                    "methodModule": "./Routers/Actor/delete.ts"
                 }
             ]
         }
